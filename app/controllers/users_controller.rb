@@ -7,4 +7,10 @@ class UsersController < ApplicationController
 
   def edit
   end
+
+  privete
+
+  def user_params
+    params.require(:user).permit(:name, :introduction, :prifile_image)
+  end
 end
