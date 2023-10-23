@@ -16,13 +16,15 @@
             <!-- current_userのメッセージ -->
             <div class="row mb-1 justify-content-end">
               <div class="col-auto">
-                <div class="card bg-info text-white" style="height: 30px;">
-                  <div class="d-flex align-items-center h-100">
-                    <div class="card-body text-center">
-                      <%= message.message %>
+                <%= link_to message, method: :delete, data: {confirm: "Delete"}, class: "text-decoration-none text-white" do %>
+                  <div class="card bg-info text-white" style="height: 30px;">
+                    <div class="d-flex align-items-center h-100">
+                      <div class="card-body text-center">
+                        <%= message.message %>
+                      </div>
                     </div>
                   </div>
-                </div>
+                <% end %>
               </div>
               <div class="col-auto">
                 <%= image_tag message.user.get_profile_image(50,50) %>
