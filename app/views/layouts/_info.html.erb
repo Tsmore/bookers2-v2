@@ -1,4 +1,4 @@
-<h2 class="mt-3">User Info</h2>
+<h2>User Info</h2>
 <%= image_tag user.get_profile_image(100,100) %>
 <table class="table">
   <tbody>
@@ -25,7 +25,7 @@
     <i class="fa-solid fa-user-cog"></i>
   <% end %>
 <% else %>
-  <% if current_user.followings?(user) %>
+  <% if current_user.following?(user) %>
     <%= link_to "Following", user_relationships_path(user.id), method: :destroy, class: "btn btn-outline-info" %>
   <% else %>
     <%= link_to "follow", user_relationships_path(user.id), method: :post, class: "btn btn-outline-primary" %>

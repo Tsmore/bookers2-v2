@@ -16,19 +16,24 @@ class User < ApplicationRecord
   validates :name, uniqueness: true, presence: true, length: {minimum: 2, maximum: 20}
   validates :introduction, length: {maximum: 50}
 
+  # profile_image.variant(resize: "#{width}x#{height}!").processed 強制的にリサイズ
+  # profile_image.variant(resize_to_limit: [width, height]).processed 上限を設定
+  # profile_image.variant(resize_and_pad: [width, height]).processed リサイズし余白を埋める
+  # profile_image.variant(resize_to_fill: [width, height]).processed リサイズしてはみ出す部分をカット
+
   def get_profile_image(width, height)
     unless profile_image.attached?
       file_path = Rails.root.join('app/assets/images/default-image.jpg')
       profile_image.attach(io: File.open(file_path), filename: 'default-image.jpg', content_type: 'image/jpeg')
     end
-    profile_image.variant(resize_to_limit: [width, height]).processed
+    profile_image.variant(resize_to_fill: [width, height]).processed
   end
 
   def follow(user_id)
     relationships.create(followed_id: user_id)
   end
 
-  def unfollow(iser_id)
+  def unfollow(user_id)
     relationships.find_by(followed_id: user_id).destroy
   end
 
