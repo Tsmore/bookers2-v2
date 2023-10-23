@@ -8,10 +8,33 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find(params[:id])
-    @books = @user.books
-    @book = Book.new
+  @user = User.find(params[:id])
+  @current_entry = Entry.where(user_id: current_user.id)
+  @another_entry = Entry.where(user_id: @user.id)
+  @is_room = false
+  unless @user.id == current_user.id
+    @current_entry.each do |current|
+      @another_entry.each do |another|
+        if current.room_id == another.room_id
+          @is_room = true
+          @room_id = current.room_id
+          break
+        end
+      end
+      break if @is_room
+    end
   end
+  unless @is_room
+    @room = Room.create
+    Entry.create(user_id: current_user.id, room_id: @room.id)
+    Entry.create(user_id: @user.id, room_id: @room.id)
+    @room_id = @room.id
+  end
+  @books = @user.books
+  @book = Book.new
+end
+
+
 
   def edit
     @user = User.find(params[:id])

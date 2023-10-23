@@ -1,0 +1,54 @@
+<div class="container mt-5">
+  <div class="row mx-auto">
+    <div class="col-md-3">
+      <%= form_with model: @message, url: messages_path, remote: true, class: 'input-group' do |f| %>
+        <%= f.hidden_field :room_id, value: @room.id %>
+        <%= f.text_area :message, rows: 4, placeholder: 'Enter your message...', class: 'form-control' %>
+        <%= f.submit 'Send', class: 'btn btn-outline-success btn-block mt-4' %>
+      <% end %>
+    </div>
+    <div class="col-md-8">
+      <!-- メッセージの一覧表示 -->
+      <div class="messages-list shadow p-3 mb-5 bg-white rounded">
+        <h2>Message</h2>
+        <% @messages.each do |message| %>
+          <% if message.user == current_user %>
+            <!-- current_userのメッセージ -->
+            <div class="row mb-1 justify-content-end">
+              <div class="col-auto">
+                <div class="card bg-info text-white" style="height: 30px;">
+                  <div class="d-flex align-items-center h-100">
+                    <div class="card-body text-center">
+                      <%= message.message %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-auto">
+                <%= image_tag message.user.get_profile_image(50,50) %>
+                <%= message.created_at.strftime('%H:%M') %>
+              </div>
+            </div>
+          <% else %>
+            <!-- 他のユーザーのメッセージ -->
+            <div class="row mb-1">
+              <div class="col-auto">
+                <%= message.created_at.strftime('%H:%M') %>
+                <%= image_tag message.user.get_profile_image(50,50) %>
+              </div>
+              <div class="col-auto">
+                <div class="card bg-secondary text-white" style="height: 30px;">
+                  <div class="d-flex align-items-center h-100">
+                    <div class="card-body text-center">
+                      <%= message.message %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

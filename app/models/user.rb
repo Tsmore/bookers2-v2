@@ -12,6 +12,8 @@ class User < ApplicationRecord
   has_many :reverse_of_relationships, dependent: :destroy, class_name: "Relationship", foreign_key: "followed_id"
   has_many :followings, through: :relationships, source: :followed
   has_many :followers, through: :reverse_of_relationships, source: :follower
+  has_many :entries, dependent: :destroy
+  has_many :messages, dependent: :destroy
 
   validates :name, uniqueness: true, presence: true, length: {minimum: 2, maximum: 20}
   validates :introduction, length: {maximum: 50}
@@ -53,6 +55,10 @@ class User < ApplicationRecord
     else
       @user = User.all
     end
+  end
+
+  def mutual_follow?(other_user)
+    self.following?(other_user) && other_user.following?(self)
   end
 
 end
